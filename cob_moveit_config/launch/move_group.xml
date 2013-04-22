@@ -21,13 +21,20 @@
     <arg name="robot" value="$(arg robot)"/>
   </include>
 
-  <rosparam file="$(arg config_path)/controllers.yaml" ns="move_group"/>
-  <rosparam param="use_controller_manager" ns="move_group">false</rosparam>
-  
+  <group ns="move_group">
+    <!-- The MoveIt Controller Manager Plugin to use -->
+    <param name="moveit_controller_manager" value="pr2_moveit_controller_manager/Pr2MoveItControllerManager" />
+
+    <!-- Configuration for the above controller manager -->
+    <rosparam command="load" file="$(arg config_path)/controllers.yaml" /> <!-- Names of available controllers + their joints -->
+    <param name="use_controller_manager" value="false" /> <!-- Do not use the PR2 controller manager -->
+  </group>
+
   <include ns="move_group" file="$(find cob_moveit_config)/launch/planning_pipeline.xml">
       <arg name="pipeline" value="$(arg pipeline)"/>
       <arg name="robot" value="$(arg robot)"/>
   </include>
+
 
 <!--  
   <include ns="move_group" file="$(find raw3-1)/launch/trajectory_execution.launch" if="$(arg allow_trajectory_execution)">
@@ -47,6 +54,16 @@
     <param name="allow_trajectory_execution" value="$(arg allow_trajectory_execution)"/>
     <param name="max_safe_path_cost" value="$(arg max_safe_path_cost)"/>
     <param name="jiggle_fraction" value="$(arg jiggle_fraction)" />
+
+
+    <!-- Params for the octomap monitor -->
+  
+    <param name="octomap_frame" type="string" value="odom_combined" />
+    <param name="octomap_resolution" type="double" value="0.05" />
+    <param name="max_range" type="double" value="5.0" />
+    
+    <!-- sensors used to update the map -->
+    <rosparam command="load" file="$(arg config_path)/sensors_kinect.yaml" />
 
     <!-- MoveGroup capabilities to load -->
     <param name="capabilities" value="move_group/MoveGroupCartesianPathService
