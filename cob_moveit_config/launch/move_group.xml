@@ -27,7 +27,7 @@
 
     <!-- Configuration for the above controller manager -->
     <rosparam command="load" file="$(arg config_path)/controllers.yaml" /> <!-- Names of available controllers + their joints -->
-    <param name="use_controller_manager" value="false" /> <!-- Do not use the PR2 controller manager -->
+    <param name="use_pr2_controller_manager" value="false" /> <!-- Do not use the PR2 controller manager -->
   </group>
 
   <include ns="move_group" file="$(find cob_moveit_config)/launch/planning_pipeline.xml">
